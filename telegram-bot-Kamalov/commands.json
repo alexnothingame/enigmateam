@@ -1,0 +1,479 @@
+{
+  "groups": [
+    {
+      "title": "Пользователи",
+      "prefix": "user",
+      "commands": [
+        "users_list",
+        "user_get",
+        "user_fullname_set",
+        "user_data",
+        "user_roles_get",
+        "user_roles_set",
+        "user_block_get",
+        "user_block_set"
+      ]
+    },
+    {
+      "title": "Дисциплины",
+      "prefix": "course",
+      "commands": [
+        "courses_list",
+        "course_get",
+        "course_update",
+        "course_tests",
+        "course_test_get",
+        "course_test_active",
+        "course_test_add",
+        "course_test_del",
+        "course_students",
+        "course_student_add",
+        "course_student_del",
+        "course_create",
+        "course_delete"
+      ]
+    },
+    {
+      "title": "Вопросы",
+      "prefix": "quest",
+      "commands": [
+        "questions_list",
+        "question_get",
+        "question_update",
+        "question_create",
+        "question_delete"
+      ]
+    },
+    {
+      "title": "Тесты",
+      "prefix": "test",
+      "commands": [
+        "test_question_add",
+        "test_question_del",
+        "test_question_order",
+        "test_attempts",
+        "test_user_grade",
+        "test_user_answers",
+        "attempt_create",
+        "attempt_get",
+        "attempt_finish",
+        "answers_get",
+        "answer_update",
+        "answer_delete"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "name": "users_list",
+      "slash": "/users_list",
+      "method": "GET",
+      "path": "/users",
+      "desc": "Посмотреть список пользователей",
+      "args": []
+    },
+    {
+      "name": "user_get",
+      "slash": "/user_get",
+      "method": "GET",
+      "path": "/users/{id}",
+      "desc": "Посмотреть информацию о пользователе",
+      "args": [
+        "id"
+      ]
+    },
+    {
+      "name": "user_fullname_set",
+      "slash": "/user_fullname_set",
+      "method": "PATCH",
+      "path": "/users/{id}/fullName",
+      "desc": "Изменить ФИО пользователя",
+      "args": [
+        "id",
+        "fullName"
+      ]
+    },
+    {
+      "name": "user_data",
+      "slash": "/user_data",
+      "method": "GET",
+      "path": "/users/{id}/data",
+      "desc": "Посмотреть данные о пользователе (курсы/оценки/тесты)",
+      "args": [
+        "id"
+      ]
+    },
+    {
+      "name": "user_roles_get",
+      "slash": "/user_roles_get",
+      "method": "GET",
+      "path": "/users/{id}/roles",
+      "desc": "Посмотреть роли пользователя",
+      "args": [
+        "id"
+      ]
+    },
+    {
+      "name": "user_roles_set",
+      "slash": "/user_roles_set",
+      "method": "PUT",
+      "path": "/users/{id}/roles",
+      "desc": "Изменить роли пользователя",
+      "args": [
+        "id",
+        "rolesCsv"
+      ]
+    },
+    {
+      "name": "user_block_get",
+      "slash": "/user_block_get",
+      "method": "GET",
+      "path": "/users/{id}/block",
+      "desc": "Посмотреть статус блокировки пользователя",
+      "args": [
+        "id"
+      ]
+    },
+    {
+      "name": "user_block_set",
+      "slash": "/user_block_set",
+      "method": "PUT",
+      "path": "/users/{id}/block",
+      "desc": "Заблокировать/разблокировать пользователя",
+      "args": [
+        "id",
+        "blocked"
+      ]
+    },
+    {
+      "name": "courses_list",
+      "slash": "/courses_list",
+      "method": "GET",
+      "path": "/courses",
+      "desc": "Посмотреть список дисциплин",
+      "args": []
+    },
+    {
+      "name": "course_get",
+      "slash": "/course_get",
+      "method": "GET",
+      "path": "/courses/{course_id}",
+      "desc": "Посмотреть информацию о дисциплине",
+      "args": [
+        "course_id"
+      ]
+    },
+    {
+      "name": "course_update",
+      "slash": "/course_update",
+      "method": "PATCH",
+      "path": "/courses/{course_id}",
+      "desc": "Изменить информацию о дисциплине",
+      "args": [
+        "course_id",
+        "name",
+        "description"
+      ]
+    },
+    {
+      "name": "course_tests",
+      "slash": "/course_tests",
+      "method": "GET",
+      "path": "/courses/{course_id}/tests",
+      "desc": "Посмотреть список тестов дисциплины",
+      "args": [
+        "course_id"
+      ]
+    },
+    {
+      "name": "course_test_get",
+      "slash": "/course_test_get",
+      "method": "GET",
+      "path": "/courses/{course_id}/tests/{test_id}",
+      "desc": "Посмотреть информацию о тесте",
+      "args": [
+        "course_id",
+        "test_id"
+      ]
+    },
+    {
+      "name": "course_test_active",
+      "slash": "/course_test_active",
+      "method": "PATCH",
+      "path": "/courses/{course_id}/tests/{test_id}/active",
+      "desc": "Активировать/деактивировать тест",
+      "args": [
+        "course_id",
+        "test_id",
+        "active"
+      ]
+    },
+    {
+      "name": "course_test_add",
+      "slash": "/course_test_add",
+      "method": "POST",
+      "path": "/courses/{course_id}/tests",
+      "desc": "Добавить тест в дисциплину",
+      "args": [
+        "course_id",
+        "title"
+      ]
+    },
+    {
+      "name": "course_test_del",
+      "slash": "/course_test_del",
+      "method": "DELETE",
+      "path": "/courses/{course_id}/tests/{test_id}",
+      "desc": "Удалить тест из дисциплины",
+      "args": [
+        "course_id",
+        "test_id"
+      ]
+    },
+    {
+      "name": "course_students",
+      "slash": "/course_students",
+      "method": "GET",
+      "path": "/courses/{course_id}/students",
+      "desc": "Посмотреть список студентов дисциплины",
+      "args": [
+        "course_id"
+      ]
+    },
+    {
+      "name": "course_student_add",
+      "slash": "/course_student_add",
+      "method": "POST",
+      "path": "/courses/{course_id}/students",
+      "desc": "Записать пользователя на дисциплину",
+      "args": [
+        "course_id",
+        "user_id"
+      ]
+    },
+    {
+      "name": "course_student_del",
+      "slash": "/course_student_del",
+      "method": "DELETE",
+      "path": "/courses/{course_id}/students/{user_id}",
+      "desc": "Отчислить пользователя с дисциплины",
+      "args": [
+        "course_id",
+        "user_id"
+      ]
+    },
+    {
+      "name": "course_create",
+      "slash": "/course_create",
+      "method": "POST",
+      "path": "/courses",
+      "desc": "Создать дисциплину",
+      "args": [
+        "name",
+        "description",
+        "teacher_id"
+      ]
+    },
+    {
+      "name": "course_delete",
+      "slash": "/course_delete",
+      "method": "DELETE",
+      "path": "/courses/{course_id}",
+      "desc": "Удалить дисциплину",
+      "args": [
+        "course_id"
+      ]
+    },
+    {
+      "name": "questions_list",
+      "slash": "/questions_list",
+      "method": "GET",
+      "path": "/questions",
+      "desc": "Посмотреть список вопросов",
+      "args": []
+    },
+    {
+      "name": "question_get",
+      "slash": "/question_get",
+      "method": "GET",
+      "path": "/questions/{id}",
+      "desc": "Посмотреть информацию о вопросе",
+      "args": [
+        "id"
+      ]
+    },
+    {
+      "name": "question_update",
+      "slash": "/question_update",
+      "method": "POST",
+      "path": "/questions/{id}/version",
+      "desc": "Изменить вопрос (создать новую версию)",
+      "args": [
+        "id",
+        "title",
+        "text",
+        "optionsCsv",
+        "correctIndex"
+      ]
+    },
+    {
+      "name": "question_create",
+      "slash": "/question_create",
+      "method": "POST",
+      "path": "/questions",
+      "desc": "Создать вопрос",
+      "args": [
+        "title",
+        "text",
+        "optionsCsv",
+        "correctIndex"
+      ]
+    },
+    {
+      "name": "question_delete",
+      "slash": "/question_delete",
+      "method": "DELETE",
+      "path": "/questions/{id}",
+      "desc": "Удалить вопрос",
+      "args": [
+        "id"
+      ]
+    },
+    {
+      "name": "test_question_del",
+      "slash": "/test_question_del",
+      "method": "DELETE",
+      "path": "/tests/{test_id}/questions/{question_id}",
+      "desc": "Удалить вопрос из теста",
+      "args": [
+        "test_id",
+        "question_id"
+      ]
+    },
+    {
+      "name": "test_question_add",
+      "slash": "/test_question_add",
+      "method": "POST",
+      "path": "/tests/{test_id}/questions",
+      "desc": "Добавить вопрос в тест",
+      "args": [
+        "test_id",
+        "question_id"
+      ]
+    },
+    {
+      "name": "test_question_order",
+      "slash": "/test_question_order",
+      "method": "PUT",
+      "path": "/tests/{test_id}/questions/order",
+      "desc": "Изменить порядок вопросов в тесте",
+      "args": [
+        "test_id",
+        "questionIdsCsv"
+      ]
+    },
+    {
+      "name": "test_attempts",
+      "slash": "/test_attempts",
+      "method": "GET",
+      "path": "/tests/{test_id}/attempts",
+      "desc": "Посмотреть попытки прохождения теста",
+      "args": [
+        "test_id"
+      ]
+    },
+    {
+      "name": "test_user_grade",
+      "slash": "/test_user_grade",
+      "method": "GET",
+      "path": "/tests/{test_id}/grades/{user_id}",
+      "desc": "Посмотреть оценку пользователя по тесту",
+      "args": [
+        "test_id",
+        "user_id"
+      ]
+    },
+    {
+      "name": "test_user_answers",
+      "slash": "/test_user_answers",
+      "method": "GET",
+      "path": "/tests/{test_id}/answers/{user_id}",
+      "desc": "Посмотреть ответы пользователя по тесту",
+      "args": [
+        "test_id",
+        "user_id"
+      ]
+    },
+    {
+      "name": "attempt_create",
+      "slash": "/attempt_create",
+      "method": "POST",
+      "path": "/tests/{test_id}/attempts",
+      "desc": "Создать попытку (начать тест)",
+      "args": [
+        "test_id"
+      ]
+    },
+    {
+      "name": "attempt_get",
+      "slash": "/attempt_get",
+      "method": "GET",
+      "path": "/attempts/{attempt_id}",
+      "desc": "Посмотреть попытку",
+      "args": [
+        "attempt_id"
+      ]
+    },
+    {
+      "name": "attempt_finish",
+      "slash": "/attempt_finish",
+      "method": "POST",
+      "path": "/attempts/{attempt_id}/finish",
+      "desc": "Завершить попытку",
+      "args": [
+        "attempt_id"
+      ]
+    },
+    {
+      "name": "answers_get",
+      "slash": "/answers_get",
+      "method": "GET",
+      "path": "/attempts/{attempt_id}/answers",
+      "desc": "Посмотреть ответы в попытке",
+      "args": [
+        "attempt_id"
+      ]
+    },
+    {
+      "name": "answer_update",
+      "slash": "/answer_update",
+      "method": "PATCH",
+      "path": "/answers/{answer_id}",
+      "desc": "Изменить ответ",
+      "args": [
+        "answer_id",
+        "index"
+      ]
+    },
+    {
+      "name": "answer_delete",
+      "slash": "/answer_delete",
+      "method": "DELETE",
+      "path": "/answers/{answer_id}",
+      "desc": "Удалить ответ (поставить -1)",
+      "args": [
+        "answer_id"
+      ]
+    },
+    {
+      "name": "starttest",
+      "slash": "/starttest",
+      "method": "POST",
+      "path": "/me/tests/start",
+      "desc": "Начать прохождение теста (упрощённый сценарий)",
+      "args": [
+        "test_id_optional"
+      ]
+    }
+  ]
+}
