@@ -1,0 +1,35 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - main
+      - auth
+
+  main:
+    build: ./main
+    env_file: .env
+    depends_on:
+      - db
+
+  auth:
+    build: ./auth
+    env_file: .env
+
+  bot:
+    build: ./bot
+    env_file: .env
+    depends_on:
+      - nginx
+
+  db:
+    image: postgres:16
+    env_file: .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
