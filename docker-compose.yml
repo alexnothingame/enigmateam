@@ -1,0 +1,75 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - main
+      - auth
+
+  main:
+    build: ./main-module
+    env_file: .env
+    depends_on:
+      - db
+
+  auth:
+    build: ./backend
+    env_file: .env
+
+  tg-redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - tg_redis_data:/data
+
+  tg-bot-logic:
+    build:
+      context: ./telegram-bot-Kamalov
+      dockerfile: deploy/Dockerfile.bot-logic
+    env_file: .env
+    environment:
+      - REDIS_ADDR=tg-redis:6379
+      - REDIS_PASSWORD=
+      # куда ходить за токенами
+      - AUTH_BASE_URL=http://auth:8000
+      # куда ходить в главный модуль
+      - MAIN_BASE_URL=http://main:8080
+      # уведомления (как у тебя в модуле)
+      - MAIN_NOTIFICATION_PATH=/notification
+      - MAIN_NOTIFICATION_ACK_PATH=/notification/ack
+      - SESSION_TTL=72h
+      - LISTEN_ADDR=:8080
+    depends_on:
+      - tg-redis
+      - auth
+      - main
+    restart: unless-stopped
+
+  tg-telegram-client:
+    build:
+      context: ./telegram-bot-Kamalov
+      dockerfile: deploy/Dockerfile.telegram-client
+    env_file: .env
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      # напрямую на bot-logic, без твоего внутреннего nginx
+      - BOT_LOGIC_URL=http://tg-bot-logic:8080
+      - CRON_CHECK_LOGIN_EVERY=10s
+      - CRON_CHECK_NOTIF_EVERY=20s
+      - POLL_TIMEOUT=60
+    depends_on:
+      - tg-bot-logic
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    env_file: .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  tg_redis_data:

@@ -16,3 +16,4 @@ def consume_code(code: str):
     if not entry or entry["expires_at"] < datetime.utcnow():
         return None
     return entry["token_login"]
+

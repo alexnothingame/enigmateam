@@ -1,0 +1,17 @@
+
+FROM golang:1.21-alpine AS builder
+ENV GOFLAGS=-mod=mod
+WORKDIR /src
+COPY go.mod ./
+RUN go mod download || true
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /out/bot-logic ./cmd/bot-logic
+
+FROM alpine:3.19
+WORKDIR /app
+RUN apk --no-cache add ca-certificates
+COPY --from=builder /out/bot-logic /app/bot-logic
+COPY commands.json /app/commands.json
+ENV COMMANDS_PATH=/app/commands.json
+EXPOSE 8080
+CMD ["/app/bot-logic"]

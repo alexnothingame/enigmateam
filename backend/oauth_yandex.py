@@ -23,7 +23,9 @@ async def get_yandex_user_info(code: str):
             },
         )
 
-        token = token_res.json()["access_token"]
+        token = token_res.json().get("access_token")
+        if not token:
+            raise ValueError("Yandex token error")
 
         user_res = await client.get(
             "https://login.yandex.ru/info?format=json",
