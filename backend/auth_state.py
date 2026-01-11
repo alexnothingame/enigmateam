@@ -4,7 +4,7 @@ auth_requests = {}
 
 def create_auth_request(token_login: str):
     auth_requests[token_login] = {
-        "expires_at": datetime.utcnow() + timedelta(minutes=5),
+        "expires_at": datetime.utcnow() + timedelta(minutes=1),
         "status": "pending",
         "access_token": None,
         "refresh_token": None,
@@ -21,4 +21,3 @@ def set_auth_success(token_login: str, access: str, refresh: str):
             "access_token": access,
             "refresh_token": refresh,
         })
-
