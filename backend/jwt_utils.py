@@ -4,15 +4,17 @@ from jose import jwt
 SECRET = "SUPER_SECRET_KEY"
 ALGO = "HS256"
 
-def create_access_token(permissions: list):
+def create_access_token(user_id: int, permissions: list):
     return jwt.encode(
         {
+            "user_id": user_id,
             "permissions": permissions,
-            "exp": datetime.utcnow() + timedelta(minutes=1),
+            "exp": datetime.utcnow() + timedelta(minutes=5),
         },
         SECRET,
         ALGO,
     )
+
 
 def create_refresh_token(email: str):
     return jwt.encode(
