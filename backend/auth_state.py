@@ -21,4 +21,3 @@ def set_auth_success(token_login: str, access: str, refresh: str):
             "access_token": access,
             "refresh_token": refresh,
         })
-

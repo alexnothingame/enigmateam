@@ -24,9 +24,7 @@ async def get_github_user_info(code: str):
             },
         )
 
-        token = token_res.json().get("access_token")
-        if not token:
-            raise ValueError("GitHub token error")
+        token = token_res.json()["access_token"]
 
         user_res = await client.get(
             "https://api.github.com/user",
@@ -34,4 +32,3 @@ async def get_github_user_info(code: str):
         )
 
         return user_res.json()
-
