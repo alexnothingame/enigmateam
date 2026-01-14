@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 from fastapi.responses import HTMLResponse
 
 from db import users
@@ -184,3 +184,39 @@ def auth_status(token_login: str):
     if not entry:
         raise HTTPException(404, "Unknown token_login")
     return entry
+
+
+@router.post(
+    "/refresh",
+    summary="Refresh JWT tokens",
+    description="""
+    Обновляет access и refresh токены.
+    Используется, если основной сервис вернул 401 Unauthorized.
+    """
+)
+async def refresh_tokens(refresh_token: str = Body(..., embed=True)):
+
+    payload = decode_token(refresh_token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+
+    email = payload.get("email")
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid refresh token payload")
+
+    user = await users.find_one({"email": email})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    new_access_token = create_access_token(["read"])
+    new_refresh_token = create_refresh_token(email)
+
+    await users.update_one(
+        {"email": email},
+        {"$push": {"refresh_tokens": new_refresh_token}}
+    )
+
+    return {
+        "access_token": new_access_token,
+        "refresh_token": new_refresh_token
+    }
